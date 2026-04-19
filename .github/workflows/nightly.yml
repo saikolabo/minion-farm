@@ -1,0 +1,82 @@
+name: Minion Farm Nightly
+
+# Note: les 3 scripts tournent en séquence dans le même job (même runner),
+# ce qui permet à topics.json de persister entre research → write → publish
+# sans avoir à le committer (il reste gitignore).
+on:
+  schedule:
+    - cron: '0 22 * * *'   # 22:00 UTC — research + write + publish en séquence
+  workflow_dispatch:
+    inputs:
+      step:
+        description: 'Étape à lancer'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - research
+          - write
+          - publish
+
+permissions:
+  contents: write
+
+jobs:
+  nightly:
+    runs-on: ubuntu-latest
+
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      GH_TOKEN:          ${{ secrets.GH_TOKEN }}
+      TELEGRAM_TOKEN:    ${{ secrets.TELEGRAM_TOKEN }}
+      TELEGRAM_CHAT_ID:  ${{ secrets.TELEGRAM_CHAT_ID }}
+      GITHUB_USERNAME:   ${{ github.repository_owner }}
+      GITHUB_REPO:       ${{ github.event.repository.name }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          fetch-depth: 1
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Configure git identity
+        run: |
+          git config user.name  "Minion Farm Bot"
+          git config user.email "minion-farm-bot@noreply.github.com"
+
+      # ── Research ────────────────────────────────────────────────────────────
+      - name: Research
+        if: >
+          github.event_name == 'schedule' ||
+          (github.event_name == 'workflow_dispatch' &&
+           (inputs.step == 'all' || inputs.step == 'research'))
+        run: python minion_research.py
+
+      # ── Write ───────────────────────────────────────────────────────────────
+      - name: Write
+        if: >
+          github.event_name == 'schedule' ||
+          (github.event_name == 'workflow_dispatch' &&
+           (inputs.step == 'all' || inputs.step == 'write'))
+        run: python minion_write.py
+
+      # ── Publish (always — commit même en cas d'erreur partielle du Write) ──
+      - name: Publish
+        if: >
+          always() && (
+            github.event_name == 'schedule' ||
+            (github.event_name == 'workflow_dispatch' &&
+             (inputs.step == 'all' || inputs.step == 'publish'))
+          )
+        run: python minion_publish.py
