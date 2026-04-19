@@ -18,8 +18,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # ── Paths ──────────────────────────────────────────────────────────────────────
-DATA_DIR = Path("data")
-PUBLISHED_FILE = DATA_DIR / "published.json"
+DATA_DIR    = Path("data")
+ASSETS_DIR  = Path("assets")
+PUBLISHED_FILE  = DATA_DIR   / "published.json"
+ARTICLES_JSON   = ASSETS_DIR / "articles.json"
 POSTS_FR = Path("posts/fr")
 POSTS_EN = Path("posts/en")
 INDEX_FR = Path("index.md")
@@ -108,6 +110,38 @@ def commit_and_push(files: list[Path], message: str) -> bool:
         log(f"  ERREUR push: {push.stderr.strip()}")
         return False
     return True
+
+
+# ── articles.json ────────────────────────────────────────────────────────────
+def _read_time(path: Path) -> int:
+    txt = path.read_text(encoding="utf-8")
+    end = txt.find("---", 3)
+    body = txt[end + 3:] if end != -1 else txt
+    return max(1, round(len(body.split()) / 200))
+
+
+def generate_articles_json() -> int:
+    ASSETS_DIR.mkdir(exist_ok=True)
+    items = []
+    for lang_dir in [POSTS_FR, POSTS_EN]:
+        for f in sorted(lang_dir.glob("*.md"), reverse=True):
+            if f.name == ".gitkeep":
+                continue
+            fm = parse_frontmatter(f.read_text(encoding="utf-8"))
+            if not fm:
+                continue
+            items.append({
+                "title":       fm.get("title", f.stem),
+                "description": fm.get("description", ""),
+                "date":        fm.get("date", ""),
+                "lang":        fm.get("lang", lang_dir.name),
+                "slug":        fm.get("slug", f.stem),
+                "filename":    f.name,
+                "read_time":   _read_time(f),
+            })
+    items.sort(key=lambda a: a["date"], reverse=True)
+    ARTICLES_JSON.write_text(json.dumps(items, ensure_ascii=False, indent=2), encoding="utf-8")
+    return len(items)
 
 
 # ── Index builders ────────────────────────────────────────────────────────────
@@ -210,7 +244,7 @@ def main() -> None:
             if fm.get("title"):
                 new_titles.append(fm["title"])
 
-    # ── 3. Regenerate index files ─────────────────────────────────────────────
+    # ── 3. Regenerate indexes + articles.json ────────────────────────────────
     log("Génération des index...")
     articles_fr = scan_articles(POSTS_FR)
     articles_en = scan_articles(POSTS_EN)
@@ -220,11 +254,14 @@ def main() -> None:
     log(f"  index.md ({len(articles_fr)} articles FR)")
     log(f"  index-en.md ({len(articles_en)} articles EN)")
 
+    n_json = generate_articles_json()
+    log(f"  assets/articles.json ({n_json} articles)")
+
     # ── 4. Commit + push ──────────────────────────────────────────────────────
     log("Commit et push...")
     configure_git_identity()
 
-    files_to_commit = new_files + [INDEX_FR, INDEX_EN]
+    files_to_commit = new_files + [INDEX_FR, INDEX_EN, ARTICLES_JSON]
     commit_msg = f"nightly [{TODAY}]: +{len(new_fr)} FR, +{len(new_en)} EN"
 
     try:
