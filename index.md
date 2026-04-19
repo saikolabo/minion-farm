@@ -1,13 +1,19 @@
 ---
-title: "Upline AI — Outils IA pour gamers et streamers"
+title: "Tous les articles — Outils IA pour gamers et streamers"
 lang: fr
 ---
 
-# Upline AI — Outils IA pour gamers et streamers
+# Outils IA pour gamers et streamers
 
 Toutes nos analyses et comparatifs des meilleurs outils IA pour améliorer ton stream et ton gaming.
 
 ---
+
+### [Supprimer le bruit de fond avec l'IA : les meilleures solutions gratuites](posts/fr/2026-04-19-supprimer-bruit-micro-ia-gratuit.md)
+*2026-04-19* — Découvrez comment supprimer le bruit micro IA gratuit avec les meilleures solutions 2026 pour streamers, gamers et créateurs de contenu.
+
+### [Générer des highlights automatiquement avec l'IA : top outils 2026](posts/fr/2026-04-19-outil-ia-creer-highlights-automatique.md)
+*2026-04-19* — Découvrez les meilleurs outils IA pour créer des highlights automatiques en 2026 et transformez vos streams en clips viraux sans effort.
 
 ### [IA de transcription pour Twitch : quels outils choisir en 2026 ?](posts/fr/2026-04-19-ia-transcription-stream-twitch.md)
 *2026-04-19* — Découvrez les meilleurs outils d'IA transcription stream Twitch en 2026 pour booster votre accessibilité et recycler votre contenu facilement.
@@ -18,4 +24,4 @@ Toutes nos analyses et comparatifs des meilleurs outils IA pour améliorer ton s
 ### [Comment améliorer la qualité de ton stream grâce à l'IA](posts/fr/2026-04-19-comment-ameliorer-qualite-stream-avec-ia.md)
 *2026-04-19* — Découvre comment améliorer la qualité de ton stream avec l'IA : son, vidéo, automatisation. Les meilleurs outils testés et comparés pour 2026.
 
-*3 article(s) — Mis à jour le 2026-04-19*
+*5 article(s) — Mis à jour le 2026-04-19*
