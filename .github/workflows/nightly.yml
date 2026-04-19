@@ -1,4 +1,4 @@
-name: Minion Farm Nightly
+name: Upline AI Nightly
 
 # Note: les 3 scripts tournent en séquence dans le même job (même runner),
 # ce qui permet à topics.json de persister entre research → write → publish
@@ -52,8 +52,8 @@ jobs:
 
       - name: Configure git identity
         run: |
-          git config user.name  "Minion Farm Bot"
-          git config user.email "minion-farm-bot@noreply.github.com"
+          git config user.name  "Upline AI Bot"
+          git config user.email "upline-ai-bot@noreply.github.com"
 
       # ── Research ────────────────────────────────────────────────────────────
       - name: Research

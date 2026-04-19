@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 minion_publish.py — Commits new articles, regenerates indexes, notifies Telegram.
-Runs at 01:00 after minion_write.py.
+Upline AI — Runs at 01:00 after minion_write.py.
 """
 
 import json
@@ -77,8 +77,8 @@ def get_new_files() -> list[Path]:
 
 
 def configure_git_identity() -> None:
-    git("config", "user.name", "Minion Farm Bot")
-    git("config", "user.email", "minion-farm-bot@noreply.github.com")
+    git("config", "user.name", "Upline AI Bot")
+    git("config", "user.email", "upline-ai-bot@noreply.github.com")
 
 
 def set_remote_with_token() -> None:

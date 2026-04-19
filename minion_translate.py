@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 minion_translate.py — Translates a French SEO article to English using Claude.
-Called by minion_write.py; also runnable standalone:
+Upline AI — Called by minion_write.py; also runnable standalone:
   python minion_translate.py posts/fr/2026-04-19-some-slug.md
 """
 

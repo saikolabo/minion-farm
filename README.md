@@ -1,2 +1,2 @@
-# minion-farm
-Minion SEO automatisé — outils IA pour gamers
+# Upline AI
+Site SEO automatisé — outils IA pour gamers et streamers

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-minion_research.py — Nightly topic discovery for Minion Farm.
+minion_research.py — Nightly topic discovery for Upline AI.
 Runs at 22:00. Scores candidate topics via pytrends, Reddit, and Google
 Autocomplete, then saves the top 3 to data/topics.json.
 """

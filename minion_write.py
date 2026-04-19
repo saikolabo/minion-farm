@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 minion_write.py — Generates FR + EN SEO articles for each topic in topics.json.
-Reads data/topics.json, skips already-published slugs, calls Claude API (FR),
+Upline AI — Reads data/topics.json, skips already-published slugs, calls Claude API (FR),
 then calls minion_translate for the EN version.
 Runs at 00:00 after minion_research.py.
 """

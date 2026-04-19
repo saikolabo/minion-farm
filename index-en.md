@@ -1,9 +1,9 @@
 ---
-title: "All Articles — AI Tools for Gamers & Streamers"
+title: "Upline AI — AI Tools for Gamers & Streamers"
 lang: en
 ---
 
-# AI Tools for Gamers & Streamers
+# Upline AI — AI Tools for Gamers & Streamers
 
 All our reviews and comparisons of the best AI tools to improve your stream and gaming.
 

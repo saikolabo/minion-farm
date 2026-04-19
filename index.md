@@ -1,9 +1,9 @@
 ---
-title: "Tous les articles — Outils IA pour gamers et streamers"
+title: "Upline AI — Outils IA pour gamers et streamers"
 lang: fr
 ---
 
-# Outils IA pour gamers et streamers
+# Upline AI — Outils IA pour gamers et streamers
 
 Toutes nos analyses et comparatifs des meilleurs outils IA pour améliorer ton stream et ton gaming.
 
