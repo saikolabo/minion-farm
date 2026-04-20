@@ -5,7 +5,8 @@ name: Upline AI Nightly
 # sans avoir à le committer (il reste gitignore).
 on:
   schedule:
-    - cron: '0 22 * * *'   # 22:00 UTC — research + write + publish en séquence
+    - cron: '0 22 * * *'      # 22:00 UTC — research + write + publish
+    - cron: '0 10 * * 1,3,5'  # 10:00 UTC Mon/Wed/Fri — Reddit comments
   workflow_dispatch:
     inputs:
       step:
@@ -18,6 +19,7 @@ on:
           - research
           - write
           - publish
+          - reddit
 
 permissions:
   contents: write
@@ -27,12 +29,16 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-      GH_TOKEN:          ${{ secrets.GH_TOKEN }}
-      TELEGRAM_TOKEN:    ${{ secrets.TELEGRAM_TOKEN }}
-      TELEGRAM_CHAT_ID:  ${{ secrets.TELEGRAM_CHAT_ID }}
-      GITHUB_USERNAME:   ${{ github.repository_owner }}
-      GITHUB_REPO:       ${{ github.event.repository.name }}
+      ANTHROPIC_API_KEY:    ${{ secrets.ANTHROPIC_API_KEY }}
+      GH_TOKEN:             ${{ secrets.GH_TOKEN }}
+      TELEGRAM_TOKEN:       ${{ secrets.TELEGRAM_TOKEN }}
+      TELEGRAM_CHAT_ID:     ${{ secrets.TELEGRAM_CHAT_ID }}
+      GITHUB_USERNAME:      ${{ github.repository_owner }}
+      GITHUB_REPO:          ${{ github.event.repository.name }}
+      REDDIT_CLIENT_ID:     ${{ secrets.REDDIT_CLIENT_ID }}
+      REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+      REDDIT_USERNAME:      ${{ secrets.REDDIT_USERNAME }}
+      REDDIT_PASSWORD:      ${{ secrets.REDDIT_PASSWORD }}
 
     steps:
       - name: Checkout
@@ -75,8 +81,15 @@ jobs:
       - name: Publish
         if: >
           always() && (
-            github.event_name == 'schedule' ||
+            (github.event_name == 'schedule' && github.event.schedule == '0 22 * * *') ||
             (github.event_name == 'workflow_dispatch' &&
              (inputs.step == 'all' || inputs.step == 'publish'))
           )
         run: python minion_publish.py
+
+      # ── Reddit (Mon/Wed/Fri 10:00 UTC) ──────────────────────────────────────
+      - name: Reddit
+        if: >
+          (github.event_name == 'schedule' && github.event.schedule == '0 10 * * 1,3,5') ||
+          (github.event_name == 'workflow_dispatch' && inputs.step == 'reddit')
+        run: python minion_reddit.py
